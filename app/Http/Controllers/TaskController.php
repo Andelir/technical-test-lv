@@ -5,57 +5,51 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Contracts\TaskServiceInterface;
 
 class TaskController extends Controller
 {
+
+    protected $taskService;
+
+    public function __construct(TaskServiceInterface $taskService)
+    {
+        $this->taskService = $taskService;
+    }
+
+    // Obtener todas las tareas
+    public function getTasks()
+    {
+        return $this->taskService->getTasks();
+    }
+
     // Crear tarea
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required|max:500',
-            'user' => 'required|max:500',
+            'user' => 'required|email|max:255',
         ]);
 
-        $task = new Task($validated);
-        $user = User::where('email',$validated['user'])->first();
-        $task->user_id = $user->id;
-        $task->save();
-
-        return redirect()->back()->with('success', 'Task created successfully.');
+        return $this->taskService->createTask($validated);
     }
 
     // Actualizar tarea
     public function update(Request $request, $id)
     {
-
         $validated = $request->validate([
-            'title' => 'required|max:255',
-            'description' => 'required|max:500',
+            'completed' => 'in:0,1'
+            // 'title' => 'required|max:255',
+            // 'description' => 'required|max:500',
         ]);
 
-        $task = Task::find($id);
-
-        if(!$task) {
-            return redirect()->back()->with('error', 'Task not found.');
-        }
-
-        // Corrección: Se actualiza la tarea con datos validados.
-        $task->update($validated);
-        return redirect()->back()->with('success', 'Task updated successfully.');
+        return $this->taskService->updateTask($id, $validated);
     }
 
     // Eliminar tarea
     public function destroy($id)
     {
-        $task = Task::find($id);
-
-        if(!$task) {
-            return redirect()->back()->with('error', 'Task not found.');
-        }
-
-        $task->delete();
-
-        return redirect()->back()->with('success', 'Task deleted successfully.');
+        return $this->taskService->deleteTask($id);
     }
 }

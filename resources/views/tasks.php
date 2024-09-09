@@ -7,7 +7,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Task List</title>
 </head>
-<body>
+<body style="background:#d3cfcf">
 <div id="app">
     <task-list></task-list>
 </div>

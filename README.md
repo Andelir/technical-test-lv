@@ -1,5 +1,49 @@
 # Prueba Técnica - Sistema de Gestión de Tareas
 
+**Solución Prueba Técnica**
+
+Dev: Anderson Elian Rubio Parrado
+Phone: +573108787096
+Email: elianrubio98018@gmail.com
+
+Se abordaron y solucionaron los siguientes inconvenientes:
+
+1. Visualización de tareas creadas:
+    - Problema: No se podían visualizar las tareas correctamente.
+    - Solución: Se creó una ruta GET para obtener todas las tareas junto con sus usuarios. Además, se modificó el componente TaskList para renderizar el JSON adecuadamente. Se implementó el método fetchTasks en las acciones del store de Vue, permitiendo su reutilización en el componente correspondiente.
+
+2. Creación de una tarea:
+    - Problema: No se podía crear una nueva tarea.
+    - Solución: Se actualizó el backend para retornar respuestas en formato JSON, lo que permitió cargar correctamente la tarea en el store de Vue. Se mantuvo el método addTask en el componente debido a las validaciones específicas presentes.
+
+3. Completado de una tarea:
+    - Problema: No se podía marcar una tarea como completada.
+    - Solución: Se ajustó el backend para que retornara JSON y se actualizó la tarea en el store de Vue. Se modificó el método completeTask en el componente, enviando solo el campo completed con valor 1. Este método no reutiliza la acción del store para permitir flexibilidad en futuras actualizaciones que puedan requerir la modificación de otros campos.
+
+3. Eliminación de una tarea:
+    - Problema: No se podía eliminar una tarea.
+    - Solución: Se actualizó el backend para que retornara JSON y se reutilizó la acción del store para eliminar la tarea de forma eficiente.
+
+**Mejoras Implementadas**
+
+- Se agregó validación con estilos de Bootstrap al formulario de creación de tareas, mejorando la experiencia de usuario.
+- Se integró la librería SweetAlert2 para mostrar notificaciones en el frontend. Se creó un interceptor en las respuestas para mostrar notificaciones visuales, utilizando verde para respuestas exitosas y rojo para errores.
+- Se añadió una capa de servicios en el backend, separando la lógica de negocio de los controladores para mejorar la mantenibilidad y escalabilidad del código.
+- Se creó un formato global para respuestas JSON en el backend, facilitando el procesamiento y renderizado de las respuestas en el frontend.
+
+- Además, se creó una semilla de datos para insertar 10 usuarios en la base de datos y así facilitar la creación de tareas.
+
+Las tareas completadas no se permiten eliminar. Sin embargo, para permitir la opción de "eliminarlas" sin perder su historial, se recomienda implementar un soft delete. Esto se lograría agregando un campo deleted_at de tipo datetime en la tabla tasks, lo que permitiría marcar las tareas como eliminadas sin borrarlas físicamente de la base de datos.
+
+Este enfoque es ideal para mantener el historial de tareas completadas, lo cual puede ser útil para futuros análisis en reportes u otros casos de uso, preservando la integridad de los datos y garantizando que se puedan restaurar o consultar en cualquier momento.
+
+**IMPORTANTE**
+
+Ejecutar el siguiente comando correr la seed:
+
+` php artisan db:seed `
+
+
 ## Descripción del Proyecto
 
 Este proyecto es un sistema básico de gestión de tareas desarrollado con Laravel y Vue.js. El objetivo de esta prueba técnica es identificar y corregir errores en el código tanto en el backend como en el frontend. El sistema permite a los usuarios crear, actualizar, eliminar y visualizar tareas.
@@ -81,4 +125,3 @@ Puedes añadir cualquier comentario adicional sobre las decisiones que tomaste a
 Recuerda que el objetivo es demostrar tu capacidad para depurar y mejorar código existente.
 
 ¡Buena suerte!
-   

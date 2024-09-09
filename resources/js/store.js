@@ -9,6 +9,9 @@ export default new Vuex.Store({
         tasks: [] // Estado inicial para las tareas
     },
     mutations: {
+        SET_TASKS(state, tasks) {
+            state.tasks = tasks; // Guardamos las tareas en el estado
+        },
         ADD_TASK(state, task) {
             state.tasks.push(task);
         },
@@ -24,18 +27,22 @@ export default new Vuex.Store({
     },
     actions: {
         addTask({ commit }, task) {
-            axios.post('/tasks', task)
+            return axios.post('/tasks', task)
                 .then(response => {
-                    commit('ADD_TASK', response.data);
+                    const { data: newTask } = response.data;
+                    commit('ADD_TASK', newTask);
+                    return response;
                 })
                 .catch(error => {
-                    console.error("Error adding task:", error);
+                    console.error('Error add task:', error);
+                    throw error;
                 });
         },
         updateTask({ commit }, task) {
             axios.put(`/tasks/${task.id}`, task)
                 .then(response => {
-                    commit('UPDATE_TASK', response.data);
+                    const { data: updatedTask } = response.data;
+                    commit('UPDATE_TASK', updatedTask);
                 })
                 .catch(error => {
                     console.error("Error updating task:", error);
@@ -49,7 +56,17 @@ export default new Vuex.Store({
                 .catch(error => {
                     console.error("Error deleting task:", error);
                 });
-        }
+        },
+        fetchTasks({ commit }) {
+            axios.get('/tasks') // Hacemos la petición GET a la ruta
+                .then(response => {
+                    const { data: tasks } = response.data;
+                    commit('SET_TASKS', tasks); // Commit de la mutación para guardar las tareas
+                })
+                .catch(error => {
+                    console.error("Error fetching tasks:", error);
+                });
+        },
     },
     getters: {
         tasks: state => state.tasks
