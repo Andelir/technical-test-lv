@@ -30,6 +30,9 @@ Se abordaron y solucionaron los siguientes inconvenientes:
 - Se integró la librería SweetAlert2 para mostrar notificaciones en el frontend. Se creó un interceptor en las respuestas para mostrar notificaciones visuales, utilizando verde para respuestas exitosas y rojo para errores.
 - Se añadió una capa de servicios en el backend, separando la lógica de negocio de los controladores para mejorar la mantenibilidad y escalabilidad del código.
 - Se creó un formato global para respuestas JSON en el backend, facilitando el procesamiento y renderizado de las respuestas en el frontend.
+- Se actualizo a bootstrap versión 5.
+- Se creo un modal con la lista de usuarios para facilitar saber los correos electrónicos.
+
 
 - Además, se creó una semilla de datos para insertar 10 usuarios en la base de datos y así facilitar la creación de tareas.
 
@@ -39,7 +42,7 @@ Este enfoque es ideal para mantener el historial de tareas completadas, lo cual 
 
 **IMPORTANTE**
 
-Ejecutar el siguiente comando correr la seed:
+Ejecutar el siguiente comando para correr la seed:
 
 ` php artisan db:seed `
 

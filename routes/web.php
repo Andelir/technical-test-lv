@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,3 +20,6 @@ Route::get('/tasks', [TaskController::class, 'getTasks']);
 Route::get('/', function () {
     return view('tasks');
 });
+
+// Users
+Route::get('/users', [UserController::class, 'getUsers']);

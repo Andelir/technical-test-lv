@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Task List</h1>
+        <h1 class="text-center mb-4">Task List 📓</h1>
         <ul class="list-group mb-4">
             <li v-for="task in tasks" :key="task.id"
                 class="list-group-item d-flex justify-content-between align-items-center">
@@ -38,21 +38,58 @@
             <div class="form-group">
                 <label for="email">
                     Assigned user email
-                    <a>View users</a>
                 </label>
+                <span class="link" @click="openModal()" data-bs-toggle="modal" data-bs-target="#modalUsers">(View
+                    users)</span>
                 <input v-model="newTask.user" type="email" id="email" class="form-control"
                     placeholder="johndoe@mail.com" autocomplete="email" required>
                 <div class="invalid-feedback">
                     Assigned user email is required
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Add Task</button>
+            <button type="submit" class="btn btn-primary btn-block mt-3">Add Task</button>
         </form>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalUsers" tabindex="-1" aria-labelledby="modalUsersLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalUsersLabel">Users list</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="user in users" :key="user.id">
+                                    <th scope="row">{{ user.id }}</th>
+                                    <td>{{ user.name }}</td>
+                                    <td>{{ user.email }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import Axios from 'axios';
 
 export default {
     data() {
@@ -62,6 +99,7 @@ export default {
                 description: '',
                 user: ''
             },
+            users: [],
             styleForm: 'card card-body',
         };
     },
@@ -70,14 +108,24 @@ export default {
     },
     methods: {
         ...mapActions(['fetchTasks', 'deleteTask']),
+        openModal() {
+            Axios.get('/users')
+                .then((res) => {
+                    this.users = res.data.data;
+                    console.log(res);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
         addTask() {
             const form = this.$refs.formTask;
             if (form.checkValidity()) {
                 this.styleForm = 'card card-body';
                 this.$store.dispatch('addTask', this.newTask).then(() => {
-                        this.newTask.title = '';
-                        this.newTask.description = '';
-                        this.newTask.user = '';
+                    this.newTask.title = '';
+                    this.newTask.description = '';
+                    this.newTask.user = '';
                 }).catch(error => {
                     console.error(error);
                 });
@@ -101,3 +149,12 @@ export default {
     }
 };
 </script>
+
+<style scoped>
+.link {
+    color: blue;
+    /* text-decoration: underline; */
+    cursor: pointer;
+    font-size: 10px;
+}
+</style>
